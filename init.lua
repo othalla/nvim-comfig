@@ -13,8 +13,6 @@ vim.cmd([[
 
 		set termguicolors
 
-		set completeopt=menu,menuone,noselect
-
 		" nerdcommenter
 		let g:NERDSpaceDelims = 1
 
@@ -62,7 +60,6 @@ vim.cmd([[
 		" Python
 		autocmd BufWrite *.py :call DeleteTrailingWS()
 		autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 textwidth=80 expandtab autoindent colorcolumn=88 fileformat=unix
-		autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 		" Puppet
 		au BufNewFile,BufRead *.pp set filetype=puppet
