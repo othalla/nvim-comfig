@@ -240,22 +240,3 @@ require('lualine').setup{
 }
 
 require'nvim-web-devicons'.setup {}
--- Lualine end
-
--- Tree
-require("nvim-tree").setup{
-	view = {
-		width = 40,
-	},
-	diagnostics = {
-		enable = true,
-		show_on_dirs = true,
-		icons = {
-			hint = "",
-			info = "",
-			warning = "",
-			error = "",
-		},
-	},
-}
--- Tree end
