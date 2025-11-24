@@ -1,31 +1,25 @@
--- plugins/completion.lua
 return {
   "hrsh7th/nvim-cmp",
-  event = { "InsertEnter", "CmdlineEnter" },
-
+  event = "InsertEnter",
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
-    "hrsh7th/cmp-cmdline",
-    {
-      "L3MON4D3/LuaSnip",
-      version = "v2.*",
-      build = "make install_jsregexp",
-      dependencies = {
-        "rafamadriz/friendly-snippets",
-      },
-    },
+    "L3MON4D3/LuaSnip",
     "saadparwaiz1/cmp_luasnip",
-    "onsails/lspkind.nvim",
   },
-
   config = function()
     local cmp = require("cmp")
     local luasnip = require("luasnip")
-    local lspkind = require("lspkind")
 
-    require("luasnip.loaders.from_vscode").lazy_load()
+    local has_words_before = function()
+      if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+        return false
+      end
+      local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+      return col ~= 0 and
+      vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+    end
 
     cmp.setup({
       snippet = {
@@ -34,22 +28,35 @@ return {
         end,
       },
 
-      -- ⭐ SIMPLE MAPPINGS - no complex logic!
+      sources = cmp.config.sources({
+        { name = "nvim_lsp", priority = 1000 },
+        { name = "luasnip", priority = 750 },
+        { name = "buffer", priority = 500 },
+        { name = "path", priority = 250 },
+      }),
+
       mapping = cmp.mapping.preset.insert({
         ["<C-b>"] = cmp.mapping.scroll_docs(-4),
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(),
         ["<C-e>"] = cmp.mapping.abort(),
+        ["<CR>"] = cmp.mapping.confirm({ select = true }),
 
-        -- ⭐ Simple Enter - confirms if selected
-        ["<CR>"] = cmp.mapping.confirm({ select = false }),
-
-        -- ⭐ Simple Tab - just navigate
+        -- Tab intelligent : Copilot ghost text > cmp > luasnip
         ["<Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
+          -- Priorité 1 : Copilot ghost text visible
+          local copilot = require("copilot.suggestion")
+          if copilot.is_visible() then
+            copilot.accept()
+            -- Priorité 2 : menu cmp ouvert
+          elseif cmp.visible() then
             cmp.select_next_item()
-          elseif luasnip.locally_jumpable(1) then
-            luasnip.jump(1)
+            -- Priorité 3 : snippet jumpable
+          elseif luasnip.expand_or_locally_jumpable() then
+            luasnip.expand_or_jump()
+            -- Priorité 4 : trigger cmp si texte avant curseur
+          elseif has_words_before() then
+            cmp.complete()
           else
             fallback()
           end
@@ -66,88 +73,21 @@ return {
         end, { "i", "s" }),
       }),
 
-      -- ⭐ Sources with Copilot integrated
-      sources = cmp.config.sources({
-        { name = "copilot", priority = 100 },
-        { name = "nvim_lsp", priority = 90 },
-        { name = "luasnip", priority = 80 },
-        { name = "path", priority = 70 },
-      }, {
-        { name = "buffer", priority = 50, keyword_length = 3 },
-      }),
-
-      completion = {
-        completeopt = "menu,menuone,noinsert",
-      },
-
-      performance = {
-        debounce = 100,
-        throttle = 80,
-        fetching_timeout = 500,
-        max_view_entries = 30,
-      },
-
-      window = {
-        completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
-      },
-
-      -- ⭐ Formatting with icon for Copilot
       formatting = {
-        format = lspkind.cmp_format({
-          mode = "symbol_text",
-          maxwidth = 50,
-          ellipsis_char = "...",
-          symbol_map = { Copilot = "" },
-
-          before = function(entry, vim_item)
-            vim_item.menu = ({
-              copilot = "[Copilot]",
-              nvim_lsp = "[LSP]",
-              luasnip = "[Snippet]",
-              buffer = "[Buffer]",
-              path = "[Path]",
-            })[entry.source.name]
-
-            return vim_item
-          end,
-        }),
+        format = function(entry, vim_item)
+          vim_item.menu = ({
+            nvim_lsp = "[LSP]",
+            luasnip = "[Snip]",
+            buffer = "[Buf]",
+            path = "[Path]",
+          })[entry.source.name]
+          return vim_item
+        end,
       },
 
-      sorting = {
-        priority_weight = 2,
-        comparators = {
-          require("copilot_cmp.comparators").prioritize,
-          cmp.config.compare.offset,
-          cmp.config.compare.exact,
-          cmp.config.compare.score,
-          cmp.config.compare.recently_used,
-          cmp.config.compare.locality,
-          cmp.config.compare.kind,
-          cmp.config.compare.sort_text,
-          cmp.config.compare.length,
-          cmp.config.compare.order,
-        },
+      experimental = {
+        ghost_text = false,  -- Désactiver ghost text de cmp (conflit avec Copilot)
       },
-    })
-
-    cmp.setup.cmdline({ "/", "?" }, {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = {
-        { name = "buffer" },
-      },
-    })
-
-    cmp.setup.cmdline(":", {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = cmp.config.sources({
-        { name = "path" },
-      }, {
-        {
-          name = "cmdline",
-        },
-      }),
-      matching = { disallow_symbol_nonprefix_matching = false },
     })
   end,
 }
