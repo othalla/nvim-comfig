@@ -135,33 +135,6 @@ vim.opt.foldnestmax = 6
 
 -- Treesitter end
 
--- Tests
-require("neotest").setup({
-	adapters = {
-		require("neotest-golang")({
-			warn_test_name_dupes = false,
-			go_test_args = { "-v", "-count=1" }
-		})
-	},
-	warn_test_name_dupes = false,
-	output_panel = {
-		enabled = false
-	},
-	diagnostic = {
-		enabled =  false
-	},
-	quickfix = {
-		enabled =  false
-	},
-	floating = {
-		border = "rounded",
-		max_height = 0.99,
-		max_width = 0.99,
-		options = {}
-	},
-})
--- Tests end
-
 --- LSP
 --- Go
 vim.lsp.config("gopls", {
