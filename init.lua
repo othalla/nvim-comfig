@@ -3,18 +3,14 @@ vim.g.mapleader = ";"
 -- enable mouse for all modes
 vim.opt.mouse = 'a'
 
+vim.opt.encoding = 'UTF-8'
+vim.opt.termguicolors = true
+
+vim.cmd('filetype plugin indent on')
+
 require("config.lazy")
 
 vim.cmd([[
-    " the contents of your existing init.vim
-		set encoding=UTF-8
-
-		filetype on
-		filetype plugin on
-		filetype indent on
-
-		set termguicolors
-
 		" nerdcommenter
 		let g:NERDSpaceDelims = 1
 
