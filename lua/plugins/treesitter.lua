@@ -1,19 +1,12 @@
--- require("nvim-treesitter.configs").setup({
-	-- ensure_installed = "all",
-	-- ignore_install = { "ipkg" },
-	-- highlight = {
-		-- enable = true,
-	-- },
--- })
--- require'nvim-treesitter.configs'.setup {
-	-- ensure_installed = "all",
-	-- ignore_install = { "ipkg" },
-	-- highlight = {
-		-- enable = true,
-	-- },
--- }
 return {
-	"nvim-treesitter/nvim-treesitter", branch = 'main', lazy = false, build = ":TSUpdate",
-	-- {'do': ':TSUpdate', 'branch': 'master'},
-	"voldikss/vim-floaterm",
+  "nvim-treesitter/nvim-treesitter", branch = 'main', lazy = false, build = ":TSUpdate",
+  "voldikss/vim-floaterm",
+
+  opts = {
+    highlight = {
+      enable = true,
+      additional_vim_regex_highlighting = false,
+    },
+  },
+
 }

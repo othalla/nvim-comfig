@@ -1,5 +1,7 @@
 vim.g.mapleader = ";"
 
+vim.cmd("syntax off")
+
 vim.opt.laststatus = 3
 
 -- enable mouse for all modes
@@ -30,8 +32,6 @@ require("config.lazy")
 vim.cmd([[
 " nerdcommenter
 let g:NERDSpaceDelims = 1
-
-syntax enable
 
 set listchars=eol:$,tab:>-,trail:.,extends:>,precedes:<
 set t_Co=256
