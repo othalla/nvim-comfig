@@ -45,5 +45,5 @@ return {
         copilot_node_command = "node", -- Node.js path
       })
     end,
-	},
+  },
 }

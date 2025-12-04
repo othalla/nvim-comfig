@@ -11,20 +11,20 @@ return {
       view = {
         width = 40,
       },
-			diagnostics = {
-				enable = true,
-				show_on_dirs = true,
-				icons = {
-					hint = "",
-					info = "",
-					warning = "",
-					error = "",
-				},
-			},
-		}
-	end,
+      diagnostics = {
+        enable = true,
+        show_on_dirs = true,
+        icons = {
+          hint = "",
+          info = "",
+          warning = "",
+          error = "",
+        },
+      },
+    }
+  end,
 
-	vim.keymap.set('n', '<leader>e', function()
-		require('nvim-tree.api').tree.toggle()
-	end, { noremap = true, silent = true, desc = 'Toggle nvim-tree' })
+  vim.keymap.set('n', '<leader>e', function()
+    require('nvim-tree.api').tree.toggle()
+  end, { noremap = true, silent = true, desc = 'Toggle nvim-tree' })
 }

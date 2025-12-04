@@ -1,3 +1,3 @@
-return { 
-	"scrooloose/nerdcommenter",
+return {
+  "scrooloose/nerdcommenter",
 }
