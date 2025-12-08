@@ -10,6 +10,13 @@ return {
   ---@module 'avante'
   ---@type avante.Config
   opts = {
+    windows = {
+      width = 40,
+      input = {
+        height = 12,
+      },
+    },
+
     -- add any opts here
     -- this file can contain specific instructions for your project
     instructions_file = "avante.md",
