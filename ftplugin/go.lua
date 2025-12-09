@@ -1,11 +1,6 @@
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "go",
+vim.api.nvim_create_autocmd("BufWritePre", {
+  buffer = 0,  -- 0 = buffer courant
   callback = function()
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      buffer = 0,
-      callback = function()
-        require("go.format").goimports()
-      end,
-    })
+    require("go.format").goimports()
   end,
 })
