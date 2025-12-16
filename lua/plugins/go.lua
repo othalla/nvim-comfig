@@ -14,11 +14,6 @@ return {
     lsp_inlay_hints = {
       enable = false,
     },
-    run_in_floaterm = true,
-    floaterm = {
-      postion = 'auto',  -- 'auto', 'center', 'top', 'bottom', 'left', 'right'
-      width = 0.5,       -- largeur (0.0-1.0 pour pourcentage)
-      height = 0.5,      -- hauteur
-    },
+    run_in_floaterm = false,
   },
 }
