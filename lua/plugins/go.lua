@@ -11,6 +11,7 @@ return {
     lsp_cfg = false,  -- false: do not setup lspconfig
     lsp_gofumpt = true, -- false: managed by gopls
     lsp_keymaps = false,
+    lsp_codelens = false,  -- ✅ Désactiver les codelens
     lsp_inlay_hints = {
       enable = false,
     },
