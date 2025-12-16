@@ -106,25 +106,6 @@ vim.opt.foldnestmax = 6
 -- Treesitter end
 
 --- LSP
---- Go
-vim.lsp.config("gopls", {
-  cmd = {"gopls", "serve"},
-  settings = {
-    gopls = {
-      gofumpt = true,
-      staticcheck = false,
-      codelenses = {
-        generate = false,
-        gc_details = true,
-        tidy = true,
-        upgrade_dependency = true,
-        vendor = false,
-      },
-    },
-  },
-})
-vim.lsp.enable({"gopls"})
-
 vim.diagnostic.config({
   virtual_text = true,
   signs = {
@@ -137,6 +118,62 @@ vim.diagnostic.config({
   },
 
 })
+
+--- Go
+vim.lsp.config("gopls", {
+  cmd = {"gopls", "serve"},
+  settings = {
+    gopls = {
+      gofumpt = true,
+      staticcheck = false,
+      codelenses = {
+        generate = true,           -- ✅ go generate uniquement
+        gc_details = false,
+        regenerate_cgo = false,
+        tidy = false,
+        upgrade_dependency = false,
+        vendor = false,
+        test = false,
+
+      },
+    },
+  },
+  on_attach = function(client, bufnr)
+    -- Codelens : utilise toujours ce client gopls spécifique
+    vim.keymap.set('n', '<leader>cl', function()
+      vim.lsp.codelens.run({
+        client_id = client.id  -- ✅ Force gopls
+      })
+    end, {
+      buffer = bufnr,
+      desc = 'Run gopls CodeLens'
+    })
+
+    -- Refresh codelens
+    vim.keymap.set('n', '<leader>cr', function()
+      vim.lsp.codelens.refresh({
+        client_id = client.id  -- ✅ Force gopls
+      })
+    end, {
+      buffer = bufnr,
+      desc = 'Refresh gopls CodeLens'
+    })
+
+    -- Auto-refresh
+    if client.server_capabilities.codeLensProvider then
+      vim.api.nvim_create_autocmd({"BufEnter", "CursorHold", "InsertLeave"}, {
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.codelens.refresh({
+            client_id = client.id  -- ✅ Force gopls
+          })
+        end,
+      })
+    end
+  end,
+
+})
+vim.lsp.enable({"gopls"})
 
 --- golangci-lint
 golangci_lint_binary = "golangci-lint"
