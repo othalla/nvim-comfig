@@ -156,7 +156,8 @@ vim.lsp.config("golangci_lint_ls", {
       "--output.json.path",
       "stdout",
       "--issues-exit-code=1",
-      "--show-stats=false"
+      "--show-stats=false",
+      "--new-from-rev=HEAD",
     },
   },
 })
