@@ -194,7 +194,6 @@ vim.lsp.config("golangci_lint_ls", {
       "stdout",
       "--issues-exit-code=1",
       "--show-stats=false",
-      "--new-from-rev=HEAD",
     },
   },
 })
