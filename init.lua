@@ -88,12 +88,9 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help ta
 -- Telescope end
 
 -- Treesitter
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "all",
-  ignore_install = { "ipkg" },
-  highlight = {
-    enable = true,
-  },
+require'nvim-treesitter'.setup {
+  -- Directory to install parsers and queries to (prepended to `runtimepath` to have priority)
+  install_dir = vim.fn.stdpath('data') .. '/site'
 }
 
 -- Folding
