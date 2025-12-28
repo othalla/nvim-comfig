@@ -94,12 +94,13 @@ require'nvim-treesitter'.setup {
 }
 
 require'nvim-treesitter'.install {
-  'rust',
   'javascript',
+  'markdown',
   'go',
   'lua',
   'json',
   'yaml',
+  'bash',
   'toml'
 }
 
