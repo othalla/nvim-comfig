@@ -103,6 +103,8 @@ require'nvim-treesitter'.install {
   'bash',
   'toml',
   'gitcommit',
+  'git_rebase',
+  'git_config',
 }
 
 -- Folding
